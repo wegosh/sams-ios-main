@@ -1,20 +1,28 @@
 PODS:
+  - Alamofire (5.4.3)
   - EstimoteBluetoothScanning (1.0.8)
   - EstimoteProximitySDK (1.6.1):
     - EstimoteBluetoothScanning (~> 1.0.8)
+  - SwiftKeychainWrapper (4.0.1)
 
 DEPENDENCIES:
+  - Alamofire (~> 5.2)
   - EstimoteProximitySDK (~> 1.6.1)
+  - SwiftKeychainWrapper
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
+    - Alamofire
     - EstimoteBluetoothScanning
     - EstimoteProximitySDK
+    - SwiftKeychainWrapper
 
 SPEC CHECKSUMS:
+  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
   EstimoteBluetoothScanning: aef117c8584951609403dc73cb07f6501911a365
   EstimoteProximitySDK: 3f3c762d1220c1112c354d681640178402634f05
+  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 32e7415561d25a7074878453638bdbc8cbc2bbb9
+PODFILE CHECKSUM: f68020a1134b1f9b73b5ad4ccbfdb54dd888c1fb
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.10.1
