@@ -23,13 +23,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>We'll show you different content based on which beacons you're in range of. (You can change this message in the Info.plist file.)</string>
+	<string>We need your bluetooth access to determine if you are within the range of BT beacons</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We'll show you different content based on which beacons you're in range of. (You can change this message in the Info.plist file.)</string>
+	<string>We need your location for attendance checking purposes</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We'll show you different content based on which beacons you're in range of. (You can change this message in the Info.plist file.)</string>
+	<string>We need your location for attendance checking purposes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We'll show you different content based on which beacons you're in range of. (You can change this message in the Info.plist file.)</string>
+	<string>We need your location for attendance checking purposes</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
