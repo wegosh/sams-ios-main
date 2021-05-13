@@ -30,9 +30,13 @@
 	<string>We need your location for attendance checking purposes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location for attendance checking purposes</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
+		<string>fetch</string>
+		<string>processing</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

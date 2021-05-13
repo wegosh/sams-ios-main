@@ -23,6 +23,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var buttonLogin: UIButton!
     
     let api_url =  "http://192.168.1.13:8000/api/auth/"
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,8 +66,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
                 if let userID = userResponse.object(forKey: "id") as? NSNumber{
                     userInstance.uID = Int(truncating: userID)
                     
-                    let saveAccessToken: Bool = KeychainWrapper.standard.set(userInstance.token!, forKey: "auth_token")
-                    let saveUserID: Bool = KeychainWrapper.standard.set(userID, forKey: "id")
+                    let saveAccessToken: Bool = KeychainWrapper.standard.set(userInstance.token!, forKey: "auth_token", withAccessibility: .always)
+                    let saveUserID: Bool = KeychainWrapper.standard.set(userID, forKey: "id", withAccessibility: .always)
+                    self.user?.uID = Int(truncating: userID)
+                    self.user?.token = user.token
+                    
                     
                     var message = ""
                     
@@ -79,7 +83,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
                     
                     print(message)
                 }
-            case .failure(let tokenFailure):
+            case .failure(_):
                 print("Token failure")
             }
         }
@@ -104,7 +108,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
                     if let token = response.object(forKey: "auth_token") as? NSString{
                         let tokenString = "\(token)"
                         userInstance.token = tokenString
-                        var isUser = self.retreiveUserDataFromApi(user: userInstance)
+                        let isUser = self.retreiveUserDataFromApi(user: userInstance)
                         isToken = true
                         if (isToken && isUser){
                             isToken = true
@@ -119,8 +123,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
     }
     
     @IBAction func onButtonPressed(_ sender: UIButton) {
-        var user = User(uID: nil, username: textFieldUsername.text ?? "", token: nil, isLogin: false)
-        userLoginToGetToken(user: user, password: textFieldPassword.text ?? "")
+        let user = User(uID: nil, username: textFieldUsername.text ?? "", token: nil, isLogin: false)
+        _ = userLoginToGetToken(user: user, password: textFieldPassword.text ?? "")
         let retreivedUserId: Int? = KeychainWrapper.standard.integer(forKey: "id")
         let retreivedAuthToken: String? = KeychainWrapper.standard.string(forKey: "auth_token")
         
@@ -129,7 +133,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
             if (retreivedUserId != nil && retreivedAuthToken != nil){
                 message = "User logged in succesfully"
             }else{
-                message = "User could not be verified"
+                message = "User could not be verified\(self.user!.username)"
             }
             
             self.performSegue(withIdentifier: "performLoginSegue", sender: self)
@@ -140,8 +144,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
            if segue.identifier == "performLoginSegue"{
             let retreivedAuthToken: String? = KeychainWrapper.standard.string(forKey: "auth_token")
-            
                 if retreivedAuthToken != nil{
+                    
                     let destView = segue.destination as! MainViewController
                 }else{
                             let alert = UIAlertController(title: "Login", message: "User could not be verified", preferredStyle: .alert)
