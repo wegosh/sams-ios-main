@@ -22,7 +22,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var textFieldPassword: UITextField!
     @IBOutlet weak var buttonLogin: UIButton!
     
-    let api_url =  "http://192.168.1.13:8000/api/auth/"
+    let api_url =  "https://wegorz.uk/api/auth/"
     var user: User?
     
     override func viewDidLoad() {
@@ -65,23 +65,25 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
                 let userResponse = TOKEN_JSON as! NSDictionary
                 if let userID = userResponse.object(forKey: "id") as? NSNumber{
                     userInstance.uID = Int(truncating: userID)
+                        let saveAccessToken: Bool = KeychainWrapper.standard.set(userInstance.token!, forKey: "auth_token", withAccessibility: .afterFirstUnlock)
+                        let saveUserID: Bool = KeychainWrapper.standard.set(userID, forKey: "id", withAccessibility: .afterFirstUnlock)
+                        self.user?.uID = Int(truncating: userID)
+                        self.user?.token = user.token
+                        
+                        var message = ""
+                        
+                        if (saveAccessToken && saveUserID){
+                            message = "User has been logged in"
+                            isUser = true
+                        }else{
+                            message = "User could not be logged in"
+                        }
+                        
+                        print(message)
                     
-                    let saveAccessToken: Bool = KeychainWrapper.standard.set(userInstance.token!, forKey: "auth_token", withAccessibility: .always)
-                    let saveUserID: Bool = KeychainWrapper.standard.set(userID, forKey: "id", withAccessibility: .always)
-                    self.user?.uID = Int(truncating: userID)
-                    self.user?.token = user.token
                     
                     
-                    var message = ""
                     
-                    if (saveAccessToken && saveUserID){
-                        message = "User has been logged in"
-                        isUser = true
-                    }else{
-                        message = "User could not be logged in"
-                    }
-                    
-                    print(message)
                 }
             case .failure(_):
                 print("Token failure")
@@ -126,18 +128,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
         let user = User(uID: nil, username: textFieldUsername.text ?? "", token: nil, isLogin: false)
         _ = userLoginToGetToken(user: user, password: textFieldPassword.text ?? "")
         let retreivedUserId: Int? = KeychainWrapper.standard.integer(forKey: "id")
+        
+        
         let retreivedAuthToken: String? = KeychainWrapper.standard.string(forKey: "auth_token")
         
-        var message = ""
-        DispatchQueue.main.async {
-            if (retreivedUserId != nil && retreivedAuthToken != nil){
-                message = "User logged in succesfully"
-            }else{
-                message = "User could not be verified\(self.user!.username)"
-            }
-            
             self.performSegue(withIdentifier: "performLoginSegue", sender: self)
-        }
+        
     }
     
 
@@ -145,14 +141,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
            if segue.identifier == "performLoginSegue"{
             let retreivedAuthToken: String? = KeychainWrapper.standard.string(forKey: "auth_token")
                 if retreivedAuthToken != nil{
-                    
-                    let destView = segue.destination as! MainViewController
+                    _ = segue.destination as! MainViewController
                 }else{
-                            let alert = UIAlertController(title: "Login", message: "User could not be verified", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
+                    let alert = UIAlertController(title: "Login", message: "User could not be verified. Make sure that your password is correct.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 }
-                
         }
     }
 
