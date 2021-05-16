@@ -86,7 +86,7 @@ If there are no errors run the application:
 
 
 \
-``` * ``` &nbsp; ``` Program runs only on real devices. Simulator will not work```
+``` * ``` &nbsp; ``` Program runs only on real devices. Simulator will not work```\
 ``` ** ``` &nbsp; ``` Application may not login on the first go. Just try again```
 
 
